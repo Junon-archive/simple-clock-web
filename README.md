@@ -21,7 +21,7 @@ An offline clock and one-shot focus timer for your desk, with a minimal theme an
 - PC system clock with optional seconds; double-click the day countdown to change its date.
 - Quick-start presets: **10, 20, 25, or 60 minutes**. Click the timer to set a custom duration; pause, resume, or reset anytime.
 - Counterclockwise timer ring covering the full selected duration. No automatic breaks or repeating rounds.
-- **30-second completion alerts:** gentle ring pulse or background flash in normal mode; a silent EMERGENCY overlay in Evangelion mode.
+- **30-second completion alerts:** use the icon-only toggle beside Start to choose a ring pulse or background flash in normal mode; Evangelion mode uses a silent EMERGENCY overlay.
 - Gear settings for themes, presets, and alerts. Enable **에반게리온 모드** under **디자인** and save. The app controls are currently in Korean.
 - Settings and progress stay in browser local storage. Reopened timers resume paused; execution gaps over three seconds also pause them.
 

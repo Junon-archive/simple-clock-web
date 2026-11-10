@@ -404,7 +404,6 @@
       : `시각 알림 꺼짐 · 설정에서 켜세요. 선택 모드: ${screen ? '화면' : '원형'}`;
     $('alert-ring-icon').toggleAttribute('hidden', screen);
     $('alert-screen-icon').toggleAttribute('hidden', !screen);
-    setText($('alert-mode-label'), screen ? '화면' : '원형');
   }
 
   function renderPulse(now) {

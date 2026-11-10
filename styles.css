@@ -69,9 +69,8 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.7; strok
 .primary-button svg { width: calc(25 * var(--u)); height: calc(25 * var(--u)); }
 #play-icon { fill: currentColor; stroke-width: 1; }
 #pause-icon { stroke-width: 4; stroke-linecap: butt; }
-.alert-mode { height: max(38px, calc(42 * var(--u))); padding: 2px; border: 1px solid transparent; gap: 1px; align-content: center; }
+.alert-mode { height: max(38px, calc(42 * var(--u))); padding: 2px; border: 1px solid transparent; }
 .alert-mode svg { width: max(16px, calc(18 * var(--u))); height: max(16px, calc(18 * var(--u))); }
-.alert-mode span { font-size: max(10px, calc(9 * var(--u))); line-height: 1.2; }
 .alert-mode[aria-pressed="true"] { color: var(--accent); border-color: #603337; background: #211518; }
 .alert-mode[data-enabled="false"] { opacity: .5; }
 .presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(7 * var(--u)); width: min(100%, calc(288 * var(--u))); margin: calc(19 * var(--u)) auto 0; }
