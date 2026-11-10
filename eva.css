@@ -1,0 +1,312 @@
+@font-face {
+  font-family: 'Eva Mincho';
+  src: url('assets/eva-mincho.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+:root.eva-mode {
+  --eva-amber: #f2a52f;
+  --eva-yellow: #edbc36;
+  --eva-green: #659b80;
+  --eva-dim: #75562c;
+  --eva-line: #a87932;
+  --eva-red: #e12d26;
+  --text: #eeb050;
+  --muted: #b89860;
+  --accent: #ee9828;
+  --background: #090b09;
+  background: var(--background);
+}
+.eva-mode body { padding: clamp(10px, 2vw, 28px); }
+.eva-mode .dashboard {
+  width: 100%; max-width: 1760px; position: relative; isolation: isolate;
+  display: grid; gap: 12px; text-align: left; color: var(--eva-amber);
+  font-family: 'Arial Narrow', 'Liberation Sans Narrow', Arial, sans-serif;
+  text-shadow: .4px 0 rgb(242 98 30 / .25);
+  filter: drop-shadow(.35px .2px .3px rgb(242 153 40 / .24));
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-areas: 'mast mast' 'timer clock' 'session session' 'footer footer';
+}
+.eva-mode .dashboard::after {
+  content: ''; position: absolute; inset: 0; z-index: 6; pointer-events: none;
+  background-image: repeating-linear-gradient(0deg, transparent 0 2px, #0003 2px 3px), url('assets/eva-grain.svg');
+  opacity: .18; mix-blend-mode: screen;
+}
+.eva-mode .eva-only { display: block; }
+.eva-mode .eva-jp { font-family: 'Eva Mincho', 'Yu Mincho', 'Noto Serif CJK JP', serif; font-weight: 900; }
+.eva-mode button, .eva-mode input { border-radius: 0; }
+.eva-mode button:focus-visible, .eva-mode input:focus-visible { outline-color: var(--eva-yellow); }
+.eva-mode .eva-masthead { grid-area: mast; display: flex; align-items: center; gap: 20px; border-top: 5px solid var(--eva-amber); border-bottom: 1px solid var(--eva-line); padding: 8px 0; }
+.eva-wordmark { font: 900 clamp(34px, 4.8vw, 66px)/.85 Georgia, serif; letter-spacing: -.09em; padding-right: 12px; border-right: 5px solid var(--eva-red); }
+.eva-masthead > div { flex: 1; min-width: 0; }
+.eva-masthead b { display: block; font-size: clamp(15px, 2vw, 26px); letter-spacing: .08em; }
+.eva-masthead span { font-size: clamp(9px, 1vw, 13px); letter-spacing: .06em; }
+.eva-terminal-code { text-align: right; line-height: 1.2; }
+.eva-mode .clock-panel, .eva-mode .timer-panel, .eva-mode .eva-magi,
+.eva-mode .eva-session, .eva-mode .eva-monitor {
+  border: 1px solid var(--eva-line); background: #090b09; padding: 14px; min-width: 0; position: relative;
+}
+.eva-mode .clock-panel { grid-area: clock; display: flex; flex-direction: column; justify-content: center; }
+.eva-mode .eva-panel-heading { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; padding-bottom: 8px; border-bottom: 1px solid var(--eva-dim); }
+.eva-panel-heading b { font-size: clamp(19px, 2vw, 29px); line-height: 1.1; }
+.eva-panel-heading span { font-size: 11px; letter-spacing: .04em; }
+.eva-mode .calendar { font-size: clamp(13px, 1.7vw, 22px); margin-top: 16px; letter-spacing: .04em; color: var(--eva-amber); }
+.eva-mode .clock { justify-content: flex-start; gap: 8px; margin-top: 8px; order: 1; }
+.eva-mode #clock-time { font-family: 'Arial Narrow', 'Liberation Sans Narrow', Arial, sans-serif; font-weight: 400; font-size: clamp(45px, 8vw, 120px); letter-spacing: -.035em; }
+.eva-mode .clock-seconds { font-size: clamp(20px, 2.5vw, 32px); color: var(--eva-green); }
+.eva-mode .dday-row { margin: 8px 0 0; min-height: 32px; justify-items: start; order: 2; }
+.eva-mode .dday { padding: 0; font-size: 24px; color: var(--eva-yellow); }
+.eva-mode .timer-panel { grid-area: timer; border-top: 7px solid var(--eva-amber); padding: 16px 18px 12px; }
+.eva-mode .eva-timer-heading { display: flex; justify-content: space-between; gap: 14px; align-items: start; }
+.eva-timer-heading h2 { font-size: clamp(30px, 4.3vw, 64px); line-height: 1; margin: 0 0 5px; letter-spacing: -.04em; }
+.eva-timer-heading > div > span { font-size: clamp(10px, 1.2vw, 17px); font-weight: 700; }
+.eva-internal { border: 2px solid var(--eva-amber); padding: 4px 17px 4px 6px; position: relative; display: flex; flex-direction: column; }
+.eva-internal::after { content: ''; position: absolute; right: 3px; top: 3px; bottom: 3px; width: 9px; background: repeating-linear-gradient(-55deg, var(--eva-red) 0 7px, transparent 7px 13px); }
+.eva-internal b { font-size: clamp(23px, 3vw, 44px); line-height: 1.05; }
+.eva-internal span { font-size: 11px; }
+.eva-mode .timer-status { font-family: 'Arial Narrow', 'Liberation Sans Narrow', Arial, 'Eva Mincho', serif; font-size: 12px; letter-spacing: .15em; margin: 12px 0 6px; color: var(--eva-green); font-weight: 900; }
+.eva-mode .timer-face { width: 100%; aspect-ratio: auto; min-height: 100px; display: flex; align-items: center; }
+.eva-mode .timer-ring { display: none; }
+.eva-mode .timer-numbers { position: static; width: 100%; gap: 0; }
+.eva-mode .timer-display { width: 100%; gap: 4px; align-items: stretch; }
+.eva-mode #timer-remaining { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; white-space: nowrap; }
+.eva-mode #eva-digits { width: 100%; height: auto; color: var(--eva-amber); stroke: none; fill: currentColor; overflow: visible; }
+.eva-mode #eva-digits polygon { opacity: .035; }
+.eva-mode #eva-digits polygon.lit { opacity: 1; }
+.eva-mode #eva-digits rect { stroke: none; }
+.eva-mode .timer-total { font-size: 12px; text-align: right; color: var(--eva-dim); letter-spacing: .05em; }
+.eva-mode .timer-editor { width: 100%; max-width: none; gap: 9px; padding: 12px; font-size: 13px; }
+.eva-mode .timer-input-row input { width: 100px; font-size: 24px; }
+.eva-mode .eva-gauge-block { margin-top: 12px; }
+.eva-gauge-label, .eva-gauge-scale { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .08em; }
+.eva-gauge { height: 20px; margin-top: 5px; background: #19241c; position: relative; overflow: hidden; }
+.eva-gauge i { display: block; width: calc(var(--progress, 1) * 100%); height: 100%; background: var(--eva-green); }
+.eva-gauge::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 5px, #090b09 5px 8px); }
+.eva-gauge-scale { margin-top: 4px; color: var(--eva-dim); }
+.eva-mode .timer-controls { justify-content: flex-start; gap: 10px; margin-top: 15px; }
+.eva-mode .timer-controls > button { width: 52px; height: 36px; padding: 7px; border: 1px solid var(--eva-amber); }
+.eva-mode .timer-controls .primary-button { width: 110px; background: var(--eva-amber); color: #090b09; }
+.eva-mode .primary-button svg { width: 20px; height: 20px; }
+.eva-mode .reset-button { color: var(--eva-amber); }
+.eva-mode #alert-mode { display: none; }
+.eva-mode .presets { margin: 10px 0 0; width: 100%; gap: 6px; }
+.eva-mode .preset { font-size: 12px; min-height: 32px; border-color: var(--eva-dim); color: var(--eva-amber); background: #15150c; }
+.eva-mode .preset:hover { background: #342515; }
+.eva-mode .eva-session { grid-area: session; }
+.eva-session dl { display: flex; gap: 18px; margin: 12px 0 0; }
+.eva-session dl > div { flex: 1; min-width: 0; }
+.eva-session dt { color: var(--eva-dim); font-size: 10px; }
+.eva-session dd { font-size: clamp(20px, 2.5vw, 36px); margin: 4px 0 0; font-variant-numeric: tabular-nums; }
+.eva-mode .eva-magi { grid-area: magi; display: none; }
+.eva-mode .eva-monitor { grid-area: monitor; display: none; }
+.eva-magi-diagram { width: 100%; max-height: 260px; margin: 6px 0; }
+.magi-cell { fill: #799b8c; stroke: var(--eva-amber); stroke-width: 2; }
+.eva-circuit { fill: none; stroke: var(--eva-dim); stroke-width: 1; }
+.magi-labels { text-anchor: middle; fill: #10150e; stroke: none; font: 700 17px 'Arial Narrow', Arial, sans-serif; }
+.magi-labels text:nth-child(even) { font-size: 11px; }
+.magi-labels .magi-title { font: 700 29px Georgia, serif; fill: var(--eva-amber); }
+.eva-panel-foot { display: flex; justify-content: space-between; border-top: 1px solid var(--eva-dim); padding-top: 7px; font-size: 9px; color: var(--eva-dim); }
+.eva-monitor-grid { position: relative; height: 125px; margin: 12px 0; overflow: hidden; background-image: linear-gradient(#65502330 1px, transparent 1px), linear-gradient(90deg, #65502330 1px, transparent 1px); background-size: 25px 25px; }
+.eva-monitor-grid svg { width: 100%; height: 100%; stroke: var(--eva-green); stroke-width: 1.3; }
+.monitor-crosshair { position: absolute; top: 0; bottom: 0; left: calc(var(--elapsed, 0) * 100%); border-left: 1px solid var(--eva-amber); width: 1px; }
+.eva-trace-label { position: absolute; left: 4px; top: 5px; font-size: 9px; color: var(--eva-dim); }
+.eva-monitor-row { font-size: 10px; margin: 10px 0; }
+.eva-monitor-row .eva-gauge { height: 13px; }
+.eva-elapsed-gauge i { width: calc(var(--elapsed, 0) * 100%); background: var(--eva-amber); }
+.eva-mode .dashboard > footer { grid-area: footer; margin: 0; border-top: 1px solid var(--eva-line); display: flex; align-items: center; gap: 8px; min-height: 36px; color: var(--eva-dim); }
+.eva-mode .eva-footer-label { margin-right: auto; font-size: 10px; letter-spacing: .1em; }
+.eva-mode .settings-button { width: 32px; height: 32px; color: var(--eva-amber); }
+.eva-mode .eva-config-label { font-size: 11px; color: var(--eva-amber); }
+.eva-mode dialog { border-color: var(--eva-dim); border-radius: 0; background: #14150f; }
+.eva-mode .save-button { color: #090b09; }
+.eva-mode input:disabled { opacity: .4; cursor: default; }
+.eva-mode .small-button { border-color: var(--eva-dim); }
+.eva-mode .eva-emergency { display: none; }
+.eva-mode[data-timer-state='completed'] .eva-emergency { display: flex; flex-wrap: wrap; gap: 3px 10px; align-items: baseline; border: 1px solid var(--eva-red); color: var(--eva-red); margin-top: 10px; padding: 6px; }
+.eva-emergency .eva-jp { font-size: 18px; }
+.eva-emergency strong { font-size: 20px; letter-spacing: -.04em; }
+.eva-emergency > span { font-size: 8px; }
+.eva-mode[data-timer-state='completed'] .timer-status { color: var(--eva-red); }
+.eva-mode.eva-alarm { animation: eva-completion-pulse 1.2s linear 25; }
+@keyframes eva-completion-pulse {
+  0%, 22%, 50%, 72%, 100% { background-color: #190a09; }
+  7%, 16%, 57%, 66% { background-color: #541612; }
+}
+.eva-alarm .timer-panel, .eva-alarm .clock-panel, .eva-alarm .eva-session,
+.eva-alarm .eva-magi, .eva-alarm .eva-monitor { border-color: var(--eva-red); background: #190b08; }
+.eva-alarm #eva-digits, .eva-alarm .magi-title, .eva-alarm .timer-total { color: var(--eva-red); fill: var(--eva-red); }
+.eva-alarm .magi-cell { fill: #441b14; stroke: var(--eva-red); }
+.eva-alarm .magi-labels { fill: #e84c31; }
+.eva-mode.eva-alarm .eva-emergency { display: none; }
+/* A body-level layer: the dashboard's filter must not become its fixed
+   containing block. The alert stays over the viewport even while scrolling. */
+.eva-alarm-overlay {
+  position: fixed; inset: 0; z-index: 20; display: grid; place-items: center;
+  overflow: hidden; pointer-events: none; isolation: isolate;
+  background: rgb(5 3 2 / .48); color: #eeb335;
+  font-family: 'Arial Narrow', 'Liberation Sans Narrow', Arial, sans-serif;
+}
+.eva-alarm-overlay::after {
+  content: ''; position: absolute; inset: 0; z-index: 3;
+  border: clamp(4px, .6vw, 10px) solid #9c251d;
+  background: repeating-linear-gradient(0deg, transparent 0 2px, #0002 2px 3px), url('assets/eva-grain.svg');
+  opacity: .25;
+}
+.eva-beacon { position: absolute; top: 0; bottom: 0; width: 65%; opacity: .12; }
+.eva-beacon-left { left: 0; background: linear-gradient(90deg, #b52e20b3, #801a1459 45%, transparent); }
+.eva-beacon-right { right: 0; background: linear-gradient(-90deg, #b52e20b3, #801a1459 45%, transparent); }
+.eva-alarm .eva-beacon { animation: eva-beacon-pulse 1.2s linear 25; animation-delay: var(--alarm-delay, 0ms); }
+.eva-alarm .eva-beacon-right { animation-name: eva-beacon-return; }
+@keyframes eva-beacon-pulse {
+  0%, 25%, 100% { opacity: .12; }
+  6%, 16% { opacity: .95; }
+}
+@keyframes eva-beacon-return {
+  0%, 50%, 75%, 100% { opacity: .12; }
+  56%, 66% { opacity: .95; }
+}
+.eva-alarm-edge { position: absolute; left: 18px; right: 18px; display: flex; justify-content: space-between; gap: 10px; font-size: clamp(10px, 1.2vw, 17px); letter-spacing: .15em; color: #e35736; }
+.eva-alarm-edge-top { top: 20px; padding-bottom: 9px; border-bottom: 2px solid #a32d21; }
+.eva-alarm-edge-bottom { bottom: 16px; padding-top: 9px; border-top: 2px solid #a32d21; }
+.eva-alarm-plate {
+  position: relative; z-index: 2; width: min(94vw, 1420px); transform: rotate(-3deg);
+  border: 3px solid #b53423; background: #100705; text-align: center;
+  box-shadow: 0 14px 0 #05030280, 0 -7px 0 #05030266;
+  text-shadow: 1px 0 #a32b1d; pointer-events: none;
+}
+.eva-alarm .eva-alarm-plate { animation: eva-warning-pulse 1.2s linear 25; animation-delay: var(--alarm-delay, 0ms); }
+@keyframes eva-warning-pulse {
+  0%, 22%, 50%, 72%, 100% { filter: brightness(.65); }
+  7%, 16%, 57%, 66% { filter: brightness(1); }
+}
+.eva-alarm-stripe {
+  height: clamp(16px, 2.4vw, 32px);
+  background-image: linear-gradient(135deg, #d69a24 25%, #100b05 25% 50%, #d69a24 50% 75%, #100b05 75%);
+  background-size: 48px 48px;
+}
+.eva-alarm .eva-alarm-stripe { animation: eva-hazard-travel 1.2s linear 25; animation-delay: var(--alarm-delay, 0ms); }
+.eva-alarm .eva-alarm-stripe-bottom { animation-direction: reverse; }
+@keyframes eva-hazard-travel { to { background-position-x: 48px; } }
+.eva-alarm-kicker { display: flex; align-items: center; justify-content: space-around; gap: 8px; padding: 9px 10px 0; }
+.eva-alarm-kicker > span { font-size: clamp(9px, 1.6vw, 24px); letter-spacing: .12em; color: #d74c30; }
+.eva-alarm-kicker .eva-jp { font-size: clamp(27px, 5.4vw, 74px); line-height: 1.1; }
+.eva-alarm-title { display: block; font-size: clamp(38px, 11.8vw, 170px); line-height: 1; letter-spacing: -.045em; font-weight: 900; padding: 3px 0; }
+.eva-alarm-subtitle { display: flex; justify-content: center; gap: clamp(12px, 4vw, 70px); font-size: clamp(9px, 1.4vw, 20px); letter-spacing: .1em; padding: 5px 8px 12px; }
+.eva-mode .eva-alarm-dismiss {
+  position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%); z-index: 4;
+  min-height: 40px; padding: 8px 15px; border: 1px solid #d44d30; color: #edbb78;
+  background: #1a0b08; pointer-events: auto; white-space: nowrap; font-size: 13px;
+}
+.eva-alarm-dismiss span { margin-left: 12px; color: #ae7960; font-size: 11px; }
+@media (max-width: 400px) {
+  .eva-alarm-edge { left: 12px; right: 12px; letter-spacing: .03em; }
+  .eva-alarm-kicker > span { font-size: 8px; letter-spacing: 0; }
+  .eva-alarm-subtitle { letter-spacing: 0; }
+}
+@media (max-height: 500px) {
+  .eva-alarm-kicker .eva-jp { font-size: clamp(26px, 8svh, 40px); }
+  .eva-alarm-title { font-size: min(11.8vw, 18svh); }
+  .eva-alarm-stripe { height: 16px; }
+  .eva-mode .eva-alarm-dismiss { bottom: 38px; }
+}
+:root.eva-mode[data-eva-layout='wide'] .dashboard {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-areas: 'mast mast mast mast mast mast mast mast mast mast mast mast' 'timer timer timer timer timer timer timer clock clock clock clock clock' 'magi magi magi magi magi monitor monitor monitor monitor session session session' 'footer footer footer footer footer footer footer footer footer footer footer footer';
+  height: calc(100svh - 56px); min-height: 590px; max-height: 1150px;
+  grid-template-rows: auto minmax(0, 1.4fr) minmax(0, 1fr) 36px;
+}
+.eva-mode[data-eva-layout='wide'] .timer-panel {
+  min-height: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 15px;
+  grid-template-areas: 'heading heading' 'status status' 'digits digits' 'gauge gauge' 'emergency emergency' 'controls presets';
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+}
+.eva-mode[data-eva-layout='wide'] .eva-timer-heading { grid-area: heading; }
+.eva-mode[data-eva-layout='wide'] .eva-timer-heading h2 { font-size: clamp(34px, 3.5vw, 52px); }
+.eva-mode[data-eva-layout='wide'] .eva-internal b { font-size: 32px; }
+.eva-mode[data-eva-layout='wide'] .timer-status { grid-area: status; margin: 7px 0 3px; }
+.eva-mode[data-eva-layout='wide'] .timer-face { grid-area: digits; min-height: 0; height: 100%; }
+.eva-mode[data-eva-layout='wide'] .timer-numbers, .eva-mode[data-eva-layout='wide'] .timer-display { height: 100%; }
+.eva-mode[data-eva-layout='wide'] #eva-digits { flex: 1; min-height: 0; height: 0; }
+.eva-mode[data-eva-layout='wide'] .eva-gauge-block { grid-area: gauge; margin-top: 6px; }
+.eva-mode[data-eva-layout='wide'] .eva-gauge { height: 14px; }
+.eva-mode[data-eva-layout='wide'] .timer-controls { grid-area: controls; margin-top: 10px; }
+.eva-mode[data-eva-layout='wide'] .presets { grid-area: presets; align-self: end; }
+.eva-mode[data-eva-layout='wide'] .eva-magi, .eva-mode[data-eva-layout='wide'] .eva-monitor { display: block; }
+.eva-mode[data-eva-layout='wide'] .eva-magi-diagram { height: calc(100% - 70px); min-height: 80px; max-height: none; }
+.eva-mode[data-eva-layout='wide'] .eva-monitor-grid { height: calc(100% - 170px); min-height: 40px; }
+.eva-mode[data-eva-layout='wide'] .eva-session dl { flex-direction: column; gap: 4px; margin-top: 8px; }
+.eva-mode[data-eva-layout='wide'] .eva-session dd { font-size: clamp(24px, 2.3vw, 32px); }
+.eva-mode[data-eva-layout='wide'] .eva-emergency { grid-area: emergency; position: static; }
+.eva-mode[data-eva-layout='portrait'] .dashboard {
+  max-width: 570px; gap: 9px; grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'mast' 'clock' 'timer' 'session' 'footer';
+}
+.eva-mode[data-eva-layout='portrait'] .eva-masthead { gap: 10px; padding: 8px 0; }
+.eva-mode[data-eva-layout='portrait'] .eva-wordmark { font-size: clamp(32px, 9vw, 56px); }
+.eva-mode[data-eva-layout='portrait'] .eva-terminal-code { display: none; }
+.eva-mode[data-eva-layout='portrait'] .eva-masthead b { font-size: clamp(13px, 3.3vw, 21px); }
+.eva-mode[data-eva-layout='portrait'] .eva-masthead span { font-size: clamp(8px, 1.8vw, 11px); }
+.eva-mode[data-eva-layout='portrait'] .clock-panel { padding: 9px 12px; display: grid; grid-template-columns: 1fr auto; gap: 0 8px; }
+.eva-mode[data-eva-layout='portrait'] .clock-panel .eva-panel-heading { display: none; }
+.eva-mode[data-eva-layout='portrait'] .calendar { font-size: 12px; margin: 0; align-self: center; grid-column: 1; }
+.eva-mode[data-eva-layout='portrait'] .clock { grid-row: 2; grid-column: 1; margin: 0; }
+.eva-mode[data-eva-layout='portrait'] #clock-time { font-size: clamp(25px, 7vw, 40px); }
+.eva-mode[data-eva-layout='portrait'] .clock-seconds { font-size: 15px; }
+.eva-mode[data-eva-layout='portrait'] .dday-row { grid-column: 2; grid-row: 1 / 3; margin: 0; align-self: center; }
+.eva-mode[data-eva-layout='portrait'] .dday { font-size: 21px; }
+.eva-mode[data-eva-layout='portrait'] .clock-panel:has(.dday-editor:not([hidden])) .dday-row { grid-row: 3; grid-column: 1 / 3; margin-top: 7px; }
+.eva-mode[data-eva-layout='portrait'] .timer-panel { padding: 12px; }
+.eva-mode[data-eva-layout='portrait'] .eva-timer-heading h2 { font-size: clamp(30px, 9vw, 49px); }
+.eva-mode[data-eva-layout='portrait'] .eva-internal b { font-size: 27px; }
+.eva-mode[data-eva-layout='portrait'] .timer-face { min-height: 95px; }
+.eva-mode[data-eva-layout='portrait'] .eva-session { padding: 8px 12px; }
+.eva-mode[data-eva-layout='portrait'] .eva-session .eva-panel-heading { display: none; }
+.eva-mode[data-eva-layout='portrait'] .eva-session dl { margin: 0; gap: 8px; }
+.eva-mode[data-eva-layout='portrait'] .eva-session dt { font-size: 8px; }
+.eva-mode[data-eva-layout='portrait'] .eva-session dd { font-size: clamp(17px, 5vw, 26px); }
+.eva-mode[data-eva-layout='portrait'] .eva-footer-label { font-size: 8px; letter-spacing: .02em; }
+@media (min-height: 900px) {
+  .eva-mode[data-eva-layout='portrait'] .dashboard { grid-template-areas: 'mast' 'clock' 'timer' 'magi' 'session' 'footer'; }
+  .eva-mode[data-eva-layout='portrait'] .eva-magi { display: block; padding: 8px 12px; }
+  .eva-mode[data-eva-layout='portrait'] .eva-magi-diagram { max-height: 150px; }
+  .eva-mode[data-eva-layout='portrait'] .eva-magi .eva-panel-heading b { font-size: 19px; }
+}
+@media (min-width: 600px) and (min-height: 900px) {
+  .eva-mode[data-eva-layout='portrait'] .dashboard { max-width: 850px; gap: 16px; }
+  .eva-mode[data-eva-layout='portrait'] .timer-panel { padding: 24px; }
+  .eva-mode[data-eva-layout='portrait'] #clock-time { font-size: 64px; }
+  .eva-mode[data-eva-layout='portrait'] .eva-magi-diagram { max-height: 270px; }
+}
+@media (max-height: 600px) {
+  .eva-mode body { padding: 8px; }
+  .eva-mode .dashboard { gap: 6px; }
+  .eva-mode .eva-masthead { padding: 5px 0; border-top-width: 3px; }
+  .eva-mode .eva-wordmark { font-size: 30px; }
+  .eva-mode .eva-masthead b { font-size: 12px; }
+  .eva-mode .eva-masthead span { font-size: 8px; }
+  .eva-mode .timer-panel { padding: 8px; }
+  .eva-mode .eva-timer-heading h2 { font-size: 29px; }
+  .eva-mode .eva-internal b { font-size: 21px; }
+  .eva-mode .timer-status { margin: 7px 0 2px; }
+  .eva-mode .timer-face { min-height: 70px; }
+  .eva-mode .eva-gauge-block { margin-top: 5px; }
+  .eva-mode .eva-gauge { height: 12px; }
+  .eva-mode .timer-controls { margin-top: 8px; }
+  .eva-mode .presets { margin-top: 6px; }
+  .eva-mode .eva-session { display: none; }
+  .eva-mode .clock-panel { padding: 7px; }
+  .eva-mode .dashboard { grid-template-areas: 'mast mast' 'timer clock' 'footer footer'; }
+  .eva-mode[data-eva-layout='portrait'] .dashboard { grid-template-areas: 'mast' 'clock' 'timer' 'footer'; }
+  .eva-mode[data-eva-layout='portrait'] .eva-masthead { padding: 5px 0; }
+  .eva-mode[data-eva-layout='portrait'] .clock-panel { padding: 6px 8px; }
+  .eva-mode[data-eva-layout='portrait'] .timer-panel { padding: 8px; }
+  .eva-mode[data-eva-layout='portrait'] .timer-face { min-height: 0; }
+  .eva-mode[data-eva-layout='portrait'] .eva-internal b { font-size: 23px; }
+  .eva-mode[data-eva-layout='portrait'] .eva-timer-heading h2 { font-size: 29px; }
+  .eva-mode[data-eva-layout='portrait'] .dashboard::after { opacity: .12; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root.eva-mode.eva-alarm { animation: none; background: var(--background); }
+  .eva-mode.eva-alarm .eva-alarm-overlay { display: none; }
+  .eva-mode.eva-alarm .eva-emergency { display: flex; }
+}

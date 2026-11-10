@@ -1,0 +1,14 @@
+# Local development dependencies and test output
+node_modules/
+playwright-report/
+test-results/
+*.log
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="나만의 작은 시계와 집중 타이머. 인터넷 없이 사용하세요.">
+  <title>Simple Clock</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="eva.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="dashboard" aria-label="시계와 집중 타이머">
+    <div class="eva-only eva-masthead" aria-hidden="true">
+      <strong class="eva-wordmark">NERV</strong>
+      <div><b class="eva-jp">特務機関・制御本部</b><span>OPERATIONS CONTROL / LOCAL SYSTEM</span></div>
+      <span class="eva-terminal-code">TERMINAL<br>01 : A</span>
+    </div>
+    <header class="clock-panel">
+      <div class="eva-only eva-panel-heading"><b class="eva-jp">現在時刻</b><span>LOCAL TIME / SYSTEM CLOCK</span></div>
+      <p id="calendar" class="calendar">—</p>
+      <div id="dday-row" class="dday-row">
+        <button id="dday" class="dday" title="더블클릭하여 날짜 수정" aria-label="D-day 날짜 수정. 더블클릭 또는 Enter">D-—</button>
+        <form id="dday-editor" class="dday-editor" hidden>
+          <div class="date-edit-controls">
+            <input id="dday-date" type="date" min="0001-01-01" max="9999-12-31" required aria-label="목표 날짜">
+            <button type="submit" class="small-button">저장</button>
+            <button id="dday-cancel" type="button" class="small-button">취소</button>
+          </div>
+          <span id="dday-error" class="field-error" role="alert"></span>
+        </form>
+      </div>
+      <div class="clock" aria-label="현재 시각">
+        <time id="clock-time">00:00</time><span id="clock-seconds" class="clock-seconds">00</span>
+      </div>
+    </header>
+
+    <section id="timer-panel" class="timer-panel" data-state="idle" aria-label="집중 타이머">
+      <div class="eva-only eva-timer-heading">
+        <div><h2 class="eva-jp">活動限界</h2><span>ACTIVE TIME REMAINING:</span></div>
+        <div class="eva-internal"><b class="eva-jp">内部</b><span>INTERNAL</span></div>
+      </div>
+      <h1 id="timer-status" class="timer-status">READY</h1>
+      <div id="timer-face" class="timer-face">
+        <svg class="timer-ring" viewBox="0 0 220 220" aria-hidden="true">
+          <circle class="ring-track" cx="110" cy="110" r="104"/>
+          <circle id="ring-progress" class="ring-progress" cx="110" cy="110" r="104" pathLength="1"/>
+          <circle id="ring-complete" class="ring-complete" cx="110" cy="110" r="104"/>
+        </svg>
+        <div class="timer-numbers">
+          <button id="timer-edit-open" class="timer-display" type="button" title="클릭하여 시간 설정" aria-label="타이머 시간 설정" aria-describedby="timer-remaining">
+            <span id="timer-remaining" class="timer-remaining">25:00</span>
+            <svg id="eva-digits" class="eva-only" viewBox="0 0 402 110" aria-hidden="true"></svg>
+            <span id="timer-total" class="timer-total">of 25:00</span>
+          </button>
+          <form id="timer-editor" class="timer-editor" hidden>
+            <label for="timer-minutes">집중 시간</label>
+            <div class="timer-input-row"><input id="timer-minutes" type="number" min="1" max="180" step="1" required aria-label="타이머 시간 (1~180분)"><span>분</span></div>
+            <div class="timer-edit-actions">
+              <button type="submit" class="small-button">설정</button>
+              <button id="timer-edit-cancel" type="button" class="small-button">취소</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="eva-only eva-gauge-block" aria-hidden="true">
+        <div class="eva-gauge-label"><span>残存時間 / RESERVE</span><span id="eva-percent">100.0%</span></div>
+        <div id="eva-progress" class="eva-gauge"><i></i></div>
+        <div class="eva-gauge-scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+      </div>
+      <div id="eva-emergency" class="eva-only eva-emergency" aria-hidden="true">
+        <b class="eva-jp">非常事態</b><strong>EMERGENCY</strong><span>ACTIVITY LIMIT REACHED / 00:00.000</span>
+      </div>
+      <div class="timer-controls">
+        <button id="reset" class="icon-button reset-button" title="초기화" aria-label="타이머 초기화" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7V2m0 5h-5M20 7a9 9 0 1 0 1 9"/></svg>
+        </button>
+        <button id="toggle" class="primary-button" title="시작" aria-label="타이머 시작">
+          <svg id="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 4 12 8-12 8Z"/></svg>
+          <svg id="pause-icon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M7 4v16M17 4v16"/></svg>
+        </button>
+        <button id="alert-mode" type="button" class="icon-button alert-mode" aria-label="화면 전체 완료 알림" aria-pressed="false" title="원형 알림 · 클릭하면 화면 알림">
+          <svg id="alert-ring-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v3"/></svg>
+          <svg id="alert-screen-icon" viewBox="0 0 24 24" aria-hidden="true" hidden><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v3m-4 0h8"/></svg>
+          <span id="alert-mode-label">원형</span>
+        </button>
+      </div>
+      <div id="presets" class="presets" aria-label="빠른 시작"></div>
+    </section>
+
+    <section class="eva-only eva-magi" aria-label="MAGI 시스템 상태">
+      <div class="eva-panel-heading"><b class="eva-jp">提訴決議</b><span>MAGI / SYSTEM STATUS</span></div>
+      <svg class="eva-magi-diagram" viewBox="0 0 600 280" role="img" aria-label="시계, 타이머, 알림 상태">
+        <path class="eva-circuit" d="M0 25h115l65 65v30M0 45h105l60 60v20M600 25H485l-65 65v30M600 45H495l-60 60v20M250 270v-45h100v45"/>
+        <path class="magi-cell" d="M220 15H380V95L335 140H265L220 95Z"/>
+        <path class="magi-cell" d="M25 130H160L240 210V260H25Z"/>
+        <path class="magi-cell" d="M575 130H440L360 210V260H575Z"/>
+        <g class="magi-labels"><text x="300" y="55">MELCHIOR・1</text><text x="300" y="80" id="eva-magi-timer">STANDBY</text>
+        <text x="125" y="200">BALTHASAR・2</text><text x="125" y="225">CLOCK / LOCAL</text>
+        <text x="475" y="200">CASPER・3</text><text x="475" y="225" id="eva-magi-alert">ALERT / READY</text>
+        <text class="magi-title" x="300" y="190">MAGI</text></g>
+      </svg>
+      <div class="eva-panel-foot"><span>INTERNAL SYSTEM</span><span>LOCAL OPERATION</span></div>
+    </section>
+    <section class="eva-only eva-session" aria-label="집중 세션 정보">
+      <div class="eva-panel-heading"><b class="eva-jp">監視記録</b><span>SESSION RECORD</span></div>
+      <dl><div><dt>総時間 / TOTAL</dt><dd id="eva-session-total">25:00</dd></div><div><dt>経過 / ELAPSED</dt><dd id="eva-session-elapsed">00:00</dd></div><div><dt>残量 / REMAINING</dt><dd id="eva-session-percent">100.0%</dd></div></dl>
+    </section>
+    <section class="eva-only eva-monitor" aria-label="집중 진행 상태">
+      <div class="eva-panel-heading"><b class="eva-jp">作動監視</b><span>ACTIVITY MONITOR</span></div>
+      <div class="eva-monitor-grid" aria-hidden="true"><span class="monitor-crosshair"></span><svg viewBox="0 0 500 130" preserveAspectRatio="none"><path d="M0 105H60L100 85H180L220 60H300L340 35H415L455 15H500"/></svg><span class="eva-trace-label">SESSION PROGRESS</span></div>
+      <div class="eva-monitor-row"><span>TIME REMAINING</span><div class="eva-gauge eva-remaining-gauge"><i></i></div></div>
+      <div class="eva-monitor-row"><span>TIME ELAPSED</span><div class="eva-gauge eva-elapsed-gauge"><i></i></div></div>
+      <div class="eva-panel-foot"><span>INTERNAL TIMER</span><span id="eva-monitor-state">STANDBY</span></div>
+    </section>
+    <footer>
+      <span class="eva-only eva-footer-label">NERV // LOCAL OPERATIONS</span>
+      <button id="settings-open" class="icon-button settings-button" title="설정" aria-label="설정 열기">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3 .7-2h4.6l.7 2 2 .9 2.1-.3 2.3 4-1.4 1.7v2.4l1.4 1.7-2.3 4-2.1-.3-2 .9-.7 2H9l-.7-2-2-.9-2.1.3-2.3-4 1.4-1.7V9.3L1.9 7.6l2.3-4 2.1.3Z" transform="translate(0 1) scale(1 .95)"/><circle cx="11.65" cy="11.5" r="3.4"/></svg>
+      </button>
+      <span class="eva-only eva-config-label">設定 / CONFIG</span>
+    </footer>
+    <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
+    <noscript>시계와 타이머를 사용하려면 브라우저의 JavaScript를 켜주세요.</noscript>
+  </main>
+
+  <div id="eva-alarm-overlay" class="eva-alarm-overlay" hidden>
+    <div class="eva-beacon eva-beacon-left" aria-hidden="true"></div>
+    <div class="eva-beacon eva-beacon-right" aria-hidden="true"></div>
+    <div class="eva-alarm-edge eva-alarm-edge-top" aria-hidden="true"><span>NERV / EMERGENCY</span><span>ACTIVITY LIMIT</span></div>
+    <div class="eva-alarm-plate" aria-hidden="true">
+      <div class="eva-alarm-stripe"></div>
+      <div class="eva-alarm-kicker"><span>WARNING</span><b class="eva-jp">非常事態</b><span>WARNING</span></div>
+      <strong class="eva-alarm-title">EMERGENCY</strong>
+      <div class="eva-alarm-subtitle"><span>ACTIVITY LIMIT REACHED</span><span>00:00.000</span></div>
+      <div class="eva-alarm-stripe eva-alarm-stripe-bottom"></div>
+    </div>
+    <div class="eva-alarm-edge eva-alarm-edge-bottom" aria-hidden="true"><span>INTERNAL TIMER</span><span>LIMIT REACHED</span></div>
+    <button id="eva-alarm-dismiss" class="eva-alarm-dismiss" type="button" aria-label="완료 경보 해제">경보 해제 <span>ESC</span></button>
+  </div>
+
+  <dialog id="settings-dialog" aria-labelledby="settings-title">
+    <form id="settings-form">
+      <header class="dialog-header">
+        <h2 id="settings-title">설정</h2>
+        <button type="button" id="settings-close" class="icon-button" aria-label="설정 닫기" title="닫기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </header>
+      <div class="dialog-body">
+        <fieldset>
+          <legend>디자인</legend>
+          <label class="switch-row">에반게리온 모드<input name="evaMode" type="checkbox" role="switch"></label>
+        </fieldset>
+        <fieldset>
+          <legend>시계</legend>
+          <label class="switch-row">초 표시<input name="showSeconds" type="checkbox" role="switch"></label>
+          <label class="switch-row">D-day 표시<input name="showDday" type="checkbox" role="switch"></label>
+          <label class="input-label" for="settings-date">목표 날짜</label>
+          <div class="date-setting"><input id="settings-date" name="targetDate" type="date" min="0001-01-01" max="9999-12-31"><button id="clear-date" type="button" class="small-button">지우기</button></div>
+        </fieldset>
+        <fieldset>
+          <legend>타이머</legend>
+          <label class="number-row" for="default-minutes">기본 시간<span><input id="default-minutes" name="defaultMinutes" type="number" min="1" max="180" step="1" required> 분</span></label>
+          <p class="input-label" id="presets-label">빠른 시작 <span class="hint">분 · 1–180</span></p>
+          <div class="preset-inputs" role="group" aria-labelledby="presets-label">
+            <input name="preset0" type="number" min="1" max="180" step="1" required aria-label="빠른 시작 1 (분)">
+            <input name="preset1" type="number" min="1" max="180" step="1" required aria-label="빠른 시작 2 (분)">
+            <input name="preset2" type="number" min="1" max="180" step="1" required aria-label="빠른 시작 3 (분)">
+            <input name="preset3" type="number" min="1" max="180" step="1" required aria-label="빠른 시작 4 (분)">
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>완료 알림</legend>
+          <label class="switch-row">완료 시각 알림 <span class="hint">30초</span><input name="pulseEnabled" type="checkbox" role="switch"></label>
+          <label class="switch-row">작은 알림 소리<input name="soundEnabled" type="checkbox" role="switch"></label>
+          <p id="eva-sound-note" class="hint" hidden>에바 모드에서는 무음</p>
+        </fieldset>
+        <p id="storage-warning" class="storage-warning" role="status" hidden>이 브라우저에서는 설정을 저장할 수 없습니다. 현재 창에서만 적용됩니다.</p>
+      </div>
+      <footer class="dialog-actions">
+        <button id="settings-cancel" type="button" class="secondary-button">취소</button>
+        <button type="submit" class="save-button">저장</button>
+      </footer>
+    </form>
+  </dialog>
+</body>
+</html>
